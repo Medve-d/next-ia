@@ -1,21 +1,62 @@
-import dotenv from 'dotenv';
-dotenv.config();
+import { useState } from 'react';
 
-import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Access your API key as an environment variable (see "Set up your API key" above)
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+export default function Chat() {
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
 
-async function run() {
-  // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!input.trim()) return;
 
-  const prompt = "écris moi une histoire drôle"
+    const newMessage = { sender: 'user', text: input };
+    setMessages([...messages, newMessage]);
 
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  const text = response.text();
-  console.log(text);
+    setLoading(true);
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: input }),
+      });
+
+      const data = await response.json();
+      const botReply = { sender: 'bot', text: data.reply };
+
+      setMessages((prevMessages) => [...prevMessages, botReply]);
+      setInput('');
+    } catch (error) {
+      console.error('Erreur:', error);
+      const errorMessage = { sender: 'bot', text: 'Une erreur est survenue.' };
+      setMessages((prevMessages) => [...prevMessages, errorMessage]);
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div className="chat-container">
+      <h1>Chat avec Gemini</h1>
+      <div className="chat-box">
+        {messages.map((msg, index) => (
+          <div key={index} className={`chat-message ${msg.sender}`}>
+            <p><strong>{msg.sender === 'user' ? 'Moi' : 'Gemini'}:</strong> {msg.text}</p>
+          </div>
+        ))}
+      </div>
+      <form onSubmit={handleSubmit} style={{ marginTop: '10px' }}>
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Écris ton message..."
+        />
+        <button type="submit" disabled={loading}>
+          {loading ? 'Envoi...' : 'Envoyer'}
+        </button>
+      </form>
+    </div>
+  );
 }
-
-run();
