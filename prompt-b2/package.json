@@ -2,12 +2,13 @@
   "name": "prompt-b2",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "jouer": "node jouermorpion"
+    "jouer": "node play.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.19.0",
@@ -15,7 +16,9 @@
     "dotenv": "^16.4.5",
     "flask": "^0.2.10",
     "next": "14.2.11",
+    "node-fetch": "^3.3.2",
     "nodejs": "^0.0.0",
+    "nodemon": "^3.1.5",
     "react": "^18",
     "react-dom": "^18"
   }

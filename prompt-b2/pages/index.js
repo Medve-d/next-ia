@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import "../styles/Home.module.css"
 
 
 export default function Home() {
@@ -87,6 +88,8 @@ export default function Home() {
         </button>
       </form>
       <button onClick={clearMessages}>Supprimer l'historique</button>
+      <a href="/morpion" style={{ marginTop: '20px', display: 'block' }}>Jouer au Morpion</a>
+
     </div>
   );
 }

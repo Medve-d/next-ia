@@ -76,3 +76,9 @@ J'ai donné comme instruction de répondre de manière familière et simplement,
 Je lui ai donné une instruction et 1 option pour ses réponses, q'il
 
 ![alt text](image-3.png)
+
+## Application morpion pour jouer contre Gemini 
+
+j'ai fait un code qui attribue O à Gemini et moi les X tout ça dans un quadrillage écris en React
+
+Je rencontre des erreur 404
