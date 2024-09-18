@@ -2,16 +2,11 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+Pour lancer l'application
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -39,18 +34,18 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
-## Sauvegarde de l'historique des messages dans le localstorage
+## Sauvegarde de l'historique des messages dans le localstorage et bouton de suppression
 
 Ici nous avons ajouter un localstorage afin de sauvegarder les messages entre nous et GEMINI, un bouton de suppression des messages fut ajouté aussi
 
 ## Intro de Fine-tuning
 
-Le fine tuning permet de préciser un axe de réponse à une ia, comme exemple sans tableau d'entrainement si je demande à une ia intégré à mon site une marque de chaussure alors que mon site vend des perceuse il me répondra normalement du type : Nike ou adidas et bien plus 
-MAIS si on entraine notre ia avec un tableau de donnée, on ne précise pas de chaussure dans notre liste de données, l'ia répondra tout simplement que la demande n'est pas dans son domaine et que celui ci est axé chaussure
+Le fine tuning permet de préciser un axe de réponse à une ia, comme exemple sans tableau d'entrainement si je demande à une ia intégré à mon site une marque de chaussure alors que mon site vend des perceuses, il me répondra normalement du type : Nike ou adidas et autres.
+MAIS si on entraine notre ia avec un tableau de donnée, on précise que l'ia doit répondre uniquement dans le domaine des perceuse, l'ia répondra tout simplement que la demande n'est pas dans son domaine et que celui ci est axé perceuse
 
 Le tableau doit être un fichier .json et ne doit pas dépasser 4Mo
 
-## Explication du projet
+## Explication du fine tuning
 
 ici nous avons créé un document .json de fine tuning afin que Gemini réponde uniquement dans le domaine du cinéma, or le problème rencontré est que on peut échanger avec gemini mais lorsque l'on pose une question input du fichier json comme exemple :
 
@@ -73,3 +68,11 @@ Maintenant il répond correctement aux questions concernant le cinéma, et si je
 Il va conseiller des films (comédie,horreur,)
 
 ![alt text](image-2.png)
+
+## Gemini répond de manière amicale 
+
+J'ai donné comme instruction de répondre de manière familière et simplement, aussi je lui ai donné le prix de mon abonnement et le délai de remboursement.
+
+Je lui ai donné une instruction et 1 option pour ses réponses, q'il
+
+![alt text](image-3.png)

@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 
-// Composant de Chat intégré
+
 export default function Home() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Récupérer les messages stockés localement
+
   useEffect(() => {
     const storedMessages = localStorage.getItem('chatMessages');
     if (storedMessages) {
@@ -18,7 +18,7 @@ export default function Home() {
     localStorage.setItem('chatMessages', JSON.stringify(updatedMessages));
   };
 
-  // Gérer la soumission du formulaire
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;

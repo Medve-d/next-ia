@@ -13,22 +13,22 @@ export default async function handler(req, res) {
       });
 
       const generationConfig = {
-        temperature: 0.2,
+        temperature: 0,
         topP: 0.95,
         topK: 64,
         maxOutputTokens: 8192,
         responseMimeType: 'text/plain',
       };
 
-      // On donne une instruction à suivre pour Gemini
+      // Donnez des instructions pour un ton cool et amical
       const instruction = `
-        Je suis un expert en cinéma. Mes réponses doivent toujours se limiter au domaine du cinéma, en recommandant des films, acteurs, réalisateurs, et autres sujets relatifs au cinéma.
+        Tu es un assistant super cool et amical qui parle de cinéma. Tes réponses doivent toujours être sympathique, pleines de bonne humeur, et donner l'impression que tu es un pote qui parle de ses films préférés. aussi l'abonnement est à 5€ et remboursement en 6h
       `;
+      const option1 = `Tu dois répondre simplement en une ou 2 phrases et avoir l'air amical, mais répond mal si quelqu'un te parle d'autre chose que le cinéma`;
 
-      
       const parts = [
-        { text: `instruction: ${instruction}` },  // Prompt d'instruction
-        { text: `input: ${message}` },  // Message user
+        { text: `instruction: ${instruction},${option1},` },  // Prompt d'instruction
+        { text: `input: ${message}` },  // Message utilisateur
       ];
 
       const result = await model.generateContent({
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
         generationConfig,
       });
 
-      const botReply = result?.response?.text() || 'Je n’ai pas pu générer de réponse.';
+      const botReply = result?.response?.text() || 'Oops, j’ai pas pu te répondre, mais on va régler ça vite fait !';
 
       res.status(200).json({ reply: botReply });
     } catch (error) {
