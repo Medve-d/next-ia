@@ -1,30 +1,50 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import dotenv from 'dotenv';
-
-dotenv.config();
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { message } = req.body;
 
-    if (!message) {
-      return res.status(400).json({ error: 'Message manquant.' });
-    }
-
-    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
-
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const result = await model.generateContent(message);
-      const response = await result.response;
-      const text = response.text();
+      const apiKey = process.env.GOOGLE_API_KEY;
+      const genAI = new GoogleGenerativeAI(apiKey);
 
-      res.status(200).json({ reply: text });
+      const model = genAI.getGenerativeModel({
+        model: 'gemini-1.5-flash',
+      });
+
+      const generationConfig = {
+        temperature: 0.2,
+        topP: 0.95,
+        topK: 64,
+        maxOutputTokens: 8192,
+        responseMimeType: 'text/plain',
+      };
+
+      // On donne une instruction à suivre pour Gemini
+      const instruction = `
+        Je suis un expert en cinéma. Mes réponses doivent toujours se limiter au domaine du cinéma, en recommandant des films, acteurs, réalisateurs, et autres sujets relatifs au cinéma.
+      `;
+
+      
+      const parts = [
+        { text: `instruction: ${instruction}` },  // Prompt d'instruction
+        { text: `input: ${message}` },  // Message user
+      ];
+
+      const result = await model.generateContent({
+        contents: [{ role: 'user', parts }],
+        generationConfig,
+      });
+
+      const botReply = result?.response?.text() || 'Je n’ai pas pu générer de réponse.';
+
+      res.status(200).json({ reply: botReply });
     } catch (error) {
-      console.error('Erreur API:', error);
-      res.status(500).json({ error: 'Erreur lors de la génération du contenu.' });
+      console.error('Erreur lors de l\'appel à l\'API Gemini:', error);
+      res.status(500).json({ error: 'Erreur lors de l\'appel à l\'API Gemini' });
     }
   } else {
-    res.status(405).json({ error: 'Méthode non autorisée.' });
+    res.setHeader('Allow', ['POST']);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }

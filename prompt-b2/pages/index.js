@@ -1,17 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-
-export default function Chat() {
+// Composant de Chat intégré
+export default function Home() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Récupérer les messages stockés localement
+  useEffect(() => {
+    const storedMessages = localStorage.getItem('chatMessages');
+    if (storedMessages) {
+      setMessages(JSON.parse(storedMessages));
+    }
+  }, []);
+
+  const updateLocalStorage = (updatedMessages) => {
+    localStorage.setItem('chatMessages', JSON.stringify(updatedMessages));
+  };
+
+  // Gérer la soumission du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
 
     const newMessage = { sender: 'user', text: input };
-    setMessages([...messages, newMessage]);
+    const updatedMessages = [...messages, newMessage];
+
+    setMessages(updatedMessages);
+    updateLocalStorage(updatedMessages);
 
     setLoading(true);
     try {
@@ -26,14 +42,25 @@ export default function Chat() {
       const data = await response.json();
       const botReply = { sender: 'bot', text: data.reply };
 
-      setMessages((prevMessages) => [...prevMessages, botReply]);
+      const updatedMessagesWithBotReply = [...updatedMessages, botReply];
+
+      setMessages(updatedMessagesWithBotReply);
+      updateLocalStorage(updatedMessagesWithBotReply);
+
       setInput('');
     } catch (error) {
-      console.error('Erreur:', error);
       const errorMessage = { sender: 'bot', text: 'Une erreur est survenue.' };
-      setMessages((prevMessages) => [...prevMessages, errorMessage]);
+      const updatedMessagesWithError = [...updatedMessages, errorMessage];
+
+      setMessages(updatedMessagesWithError);
+      updateLocalStorage(updatedMessagesWithError);
     }
     setLoading(false);
+  };
+
+  const clearMessages = () => {
+    setMessages([]);
+    localStorage.removeItem('chatMessages');
   };
 
   return (
@@ -42,21 +69,24 @@ export default function Chat() {
       <div className="chat-box">
         {messages.map((msg, index) => (
           <div key={index} className={`chat-message ${msg.sender}`}>
-            <p><strong>{msg.sender === 'user' ? 'Moi' : 'Gemini'}:</strong> {msg.text}</p>
+            <p>
+              <strong>{msg.sender === 'user' ? 'Moi' : 'Gemini'}:</strong> {msg.text}
+            </p>
           </div>
         ))}
       </div>
-      <form onSubmit={handleSubmit} style={{ marginTop: '10px' }}>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Écris ton message..."
+          placeholder="Écris quelques choses !"
         />
         <button type="submit" disabled={loading}>
-          {loading ? 'Envoi...' : 'Envoyer'}
+          {loading ? 'Envoi' : 'Envoyer'}
         </button>
       </form>
+      <button onClick={clearMessages}>Supprimer l'historique</button>
     </div>
   );
 }

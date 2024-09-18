@@ -1,0 +1,8 @@
+[
+    { "input": "Je veux un film romantique", "output": "Titanic" },
+    { "input": "Conseille-moi un film d'action", "output": "Equalizer 3" },
+    { "input": "Donne-moi un film d'horreur", "output": "Annabelle" },
+    { "input": "Donne-moi un film comédie", "output": "Le dîner de cons" },
+    { "input": "Donne-moi un film éclaté", "output": "Minecraft"}
+  ]
+  

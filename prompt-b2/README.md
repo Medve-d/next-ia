@@ -38,3 +38,38 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## Sauvegarde de l'historique des messages dans le localstorage
+
+Ici nous avons ajouter un localstorage afin de sauvegarder les messages entre nous et GEMINI, un bouton de suppression des messages fut ajouté aussi
+
+## Intro de Fine-tuning
+
+Le fine tuning permet de préciser un axe de réponse à une ia, comme exemple sans tableau d'entrainement si je demande à une ia intégré à mon site une marque de chaussure alors que mon site vend des perceuse il me répondra normalement du type : Nike ou adidas et bien plus 
+MAIS si on entraine notre ia avec un tableau de donnée, on ne précise pas de chaussure dans notre liste de données, l'ia répondra tout simplement que la demande n'est pas dans son domaine et que celui ci est axé chaussure
+
+Le tableau doit être un fichier .json et ne doit pas dépasser 4Mo
+
+## Explication du projet
+
+ici nous avons créé un document .json de fine tuning afin que Gemini réponde uniquement dans le domaine du cinéma, or le problème rencontré est que on peut échanger avec gemini mais lorsque l'on pose une question input du fichier json comme exemple :
+
+Donne moi un film d'horreur 
+
+Il va répondre qu'il ne peut pas donner de film d'horreur.
+
+![alt text](image.png)
+
+Les tests effectué sur GOOGLE AI sont bon (Screen):
+
+![alt text](image-1.png)
+
+## Update concernant le fin-tuning
+
+J'ai contourné le fine tuning direct par une instruction à Gemini.
+
+Maintenant il répond correctement aux questions concernant le cinéma, et si je lui pose une question hors-sujet il va répondre qu'il ne peut pas répondre et redirige dans le domaine du cinéma.
+
+Il va conseiller des films (comédie,horreur,)
+
+![alt text](image-2.png)
