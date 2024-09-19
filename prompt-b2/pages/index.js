@@ -66,7 +66,7 @@ export default function Home() {
 
   return (
     <div className="chat-container">
-      <h1>Chat avec Gemini</h1>
+      <h1>Parlons cinéma !</h1>
       <div className="chat-box">
         {messages.map((msg, index) => (
           <div key={index} className={`chat-message ${msg.sender}`}>
